@@ -32,6 +32,13 @@ export function executeCommand(state, fighterId, rawInput) {
   const fighter = fighterId === 'player' ? state.player : state.bot;
   const opponent = fighterId === 'player' ? state.bot : state.player;
 
+  // Play again / restart command
+  if (cmd === 'play again' || cmd === 'playagain' || cmd === 'restart') {
+    state.restartRequested = true;
+    addLogMessage(state, `${fighter.name}: Play Again! Restarting duel...`, 'system');
+    return { success: true, action: 'restart' };
+  }
+
   // If frozen, cannot type commands
   if (fighter.frozen) {
     if (fighterId === 'player') {

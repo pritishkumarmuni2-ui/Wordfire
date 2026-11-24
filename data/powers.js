@@ -388,4 +388,4 @@ export const ELEMENT_COMMANDS = {
   light: ['light beam', 'speed', 'radiation', 'shoot', 'power', 'solar beam'],
 };
 
-export const UNIVERSAL_COMMANDS = ['shield', 'dodge', 'help', 'collect', 'swap', 'slash', 'stab', 'arrow'];
+export const UNIVERSAL_COMMANDS = ['shield', 'dodge', 'help', 'collect', 'swap', 'slash', 'stab', 'arrow', 'play again', 'playagain', 'restart'];

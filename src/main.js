@@ -76,7 +76,7 @@ function updateQuickCommands(element) {
   quickCommandsList.innerHTML = '';
 
   const elemSpells = ELEMENT_COMMANDS[element] || [];
-  const universalSpells = ['shield', 'dodge', 'collect', 'swap', 'help'];
+  const universalSpells = ['shield', 'dodge', 'collect', 'swap', 'play again', 'help'];
 
   // Elemental Spells
   elemSpells.forEach((cmd) => {
@@ -106,12 +106,37 @@ function updateQuickCommands(element) {
   });
 }
 
+function handlePlayerCommand(typedCommand) {
+  const norm = (typedCommand || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  if (norm === 'play again' || norm === 'playagain' || norm === 'restart') {
+    startNewMatch();
+    return;
+  }
+  if (gameState && !gameState.ended) {
+    const res = executeCommand(gameState, 'player', typedCommand);
+    if (res && res.action === 'restart') {
+      startNewMatch();
+      return;
+    }
+    updateDOMEventLog(gameState);
+  }
+}
+
 function onQuickCommandClick(cmd) {
+  const norm = (cmd || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  if (norm === 'play again' || norm === 'playagain' || norm === 'restart') {
+    startNewMatch();
+    return;
+  }
   if (commandInput) {
     commandInput.value = cmd;
   }
   if (gameState && !gameState.ended) {
-    executeCommand(gameState, 'player', cmd);
+    const res = executeCommand(gameState, 'player', cmd);
+    if (res && res.action === 'restart') {
+      startNewMatch();
+      return;
+    }
     if (commandInput) commandInput.value = '';
     updateDOMEventLog(gameState);
   }
@@ -219,9 +244,7 @@ function startNewMatch() {
         canvas,
         commandInput,
         (typedCommand) => {
-          if (gameState && !gameState.ended) {
-            executeCommand(gameState, 'player', typedCommand);
-          }
+          handlePlayerCommand(typedCommand);
         },
         () => (gameState && gameState.camera ? gameState.camera.x : 0)
       );
@@ -349,6 +372,14 @@ function showResultOverlay(state) {
       <div class="stat-chip">Duration: <span>${timeStr}</span></div>
       <div class="stat-chip">Mode: <span>${state.botDifficulty.toUpperCase()}</span></div>
     `;
+  }
+
+  // Ensure command input remains focused so player can type 'play again'
+  if (commandInput) {
+    commandInput.focus();
+  }
+  if (inputHandler) {
+    inputHandler.ensureFocus();
   }
 }
 

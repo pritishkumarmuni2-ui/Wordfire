@@ -39,6 +39,7 @@ If your browser allows local module loading, simply double-click `index.html` to
 ## Commands Reference
 
 ### Universal & Utility
+- `play again` / `restart` — Instantly resets and starts a fresh duel without needing to click with the mouse. Can also be clicked from the quick-command bar.
 - `help` — Prints your element's available commands in the combat log.
 - `shield` — Deploys a protective dome for 5 seconds (5s cooldown). Blocks all normal powers and weapon strikes. (Ultimates deal 2 chip damage through it).
 - `dodge` — Prepares an evasive dash (2s cooldown). After typing, press `Arrow Left` or `Arrow Right` within 2 seconds to dash 220 px (or 330 px with Light Speed buff) with 0.3s invulnerability.
