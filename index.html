@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordfire v1</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Viewport Container for Canvas & Overlays -->
+    <div id="canvas-wrapper">
+      <canvas id="game-canvas" width="960" height="540"></canvas>
+
+      <!-- Pick Screen Overlay -->
+      <div id="pick-screen" class="overlay-screen">
+        <div class="modal-card">
+          <div class="logo-badge">TYPING DUEL ARENA</div>
+          <h1 class="game-logo">WORDFIRE</h1>
+          <p class="tagline">Master spell typing, martial weapons &amp; aerial pendulum swinging</p>
+
+          <div class="section-title">CHOOSE YOUR ELEMENT</div>
+          <div class="element-picker">
+            <div class="element-card selected" data-element="fire">
+              <div class="card-icon">🔥</div>
+              <div class="element-name">FIRE</div>
+              <div class="element-title">Pyromancer</div>
+              <div class="element-desc">Fireball (4 dmg), Flames stream, Heat Wave buff, Melee fire hands &amp; Inferno Blast</div>
+            </div>
+            <div class="element-card" data-element="ice">
+              <div class="card-icon">❄️</div>
+              <div class="element-name">ICE</div>
+              <div class="element-title">Cryomancer</div>
+              <div class="element-desc">Ice Beam, Blizzard slow (-30%), Ice Spikes, 5-Snowman Army &amp; Freezing Ice Sphere</div>
+            </div>
+            <div class="element-card" data-element="wind">
+              <div class="card-icon">💨</div>
+              <div class="element-name">WIND</div>
+              <div class="element-title">Aeromancer</div>
+              <div class="element-desc">Air Slash, 3-burst Cluster, 3s Flight, Wind Punch &amp; Pulling Tornado Arrow</div>
+            </div>
+            <div class="element-card" data-element="light">
+              <div class="card-icon">⚡</div>
+              <div class="element-name">LIGHT</div>
+              <div class="element-title">Photomancer</div>
+              <div class="element-desc">3s Laser Beam, Speed dash buff (330px), Radiation (+20% dmg), Shoot &amp; Solar Beam</div>
+            </div>
+          </div>
+
+          <div class="section-title">CHOOSE BOT OPPONENT</div>
+          <div class="difficulty-picker">
+            <button class="diff-btn selected" data-difficulty="easy">
+              <span class="diff-label">🟢 EASY BOT</span>
+              <span class="diff-sub">Relaxed typing (260ms), 10% mistypes, occasional defense</span>
+            </button>
+            <button class="diff-btn" data-difficulty="hard">
+              <span class="diff-label">🔴 HARD BOT</span>
+              <span class="diff-sub">Rapid reaction (130ms), zero mistypes, 60% shield/dodge, instant ultimates</span>
+            </button>
+          </div>
+
+          <div class="controls-overview">
+            <span class="ctrl-pill"><b>← / →</b> Run</span>
+            <span class="ctrl-pill"><b>↑</b> Jump</span>
+            <span class="ctrl-pill"><b>Click &amp; Hold Anchor</b> Swing</span>
+            <span class="ctrl-pill"><b>Type &amp; Enter</b> Cast / Strike</span>
+          </div>
+
+          <button id="start-match-btn" class="primary-btn">ENTER DUEL ⚔️</button>
+        </div>
+      </div>
+
+      <!-- Result Screen Overlay -->
+      <div id="result-overlay" class="overlay-screen hidden">
+        <div class="modal-card result-modal">
+          <div id="result-badge" class="result-badge">MATCH CONCLUDED</div>
+          <div id="result-title" class="result-title">YOU WIN!</div>
+          <div id="result-subtitle" class="result-subtitle">Final HP — Player: 100 | Bot: 0</div>
+          <div id="result-stats" class="result-stats"></div>
+          <div class="result-actions">
+            <button id="play-again-btn" class="primary-btn">PLAY AGAIN ↺</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls: Quick Commands, Always-Focused Input & Styled Combat Log -->
+    <div id="bottom-bar">
+      <!-- Quick Command Pill Bar -->
+      <div id="quick-bar">
+        <div class="quick-title">COMMANDS:</div>
+        <div id="quick-commands-list">
+          <!-- Dynamically populated based on chosen element -->
+        </div>
+      </div>
+
+      <div id="input-row">
+        <span class="prompt-symbol">&gt;</span>
+        <input
+          type="text"
+          id="command-input"
+          placeholder="Type command and press Enter (or click any spell above)..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <div class="input-actions-hint">
+          <span class="hint-tag">ENTER to execute</span>
+        </div>
+      </div>
+
+      <div id="log-section">
+        <div class="log-header">
+          <span class="log-title">COMBAT LOG</span>
+          <span class="log-info">Recent battle actions &amp; status</span>
+        </div>
+        <ul id="event-log">
+          <li class="log-item log-system"><span class="log-tag tag-sys">SYS</span> Match ready. Choose your element and enter the duel.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
