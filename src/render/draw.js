@@ -705,6 +705,62 @@ function drawMeleeAttacks(ctx, fighter) {
     ctx.beginPath();
     ctx.arc(melee.range * 0.6, 0, 20, 0, Math.PI * 2);
     ctx.stroke();
+  } else if (melee.type === 'punch') {
+    // Sharp forward thrust lines + impact ring
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(8, -4);
+    ctx.lineTo(melee.range - 10, -4);
+    ctx.moveTo(8, 4);
+    ctx.lineTo(melee.range - 10, 4);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(melee.range - 6, 0, 10, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = melee.element ? CONFIG.colors[melee.element] : '#FFFFFF';
+    ctx.beginPath();
+    ctx.arc(melee.range - 6, 0, 4, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (melee.type === 'kick') {
+    // Dynamic sweeping curve arc + motion blur trails
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 10, melee.range, -Math.PI * 0.15, Math.PI * 0.45);
+    ctx.stroke();
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 10, melee.range - 12, -Math.PI * 0.05, Math.PI * 0.35);
+    ctx.stroke();
+  } else if (melee.type === 'uppercut') {
+    // Ascending curved sonic slash & upward bursting trail
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(10, 20, melee.range, -Math.PI * 0.55, -Math.PI * 0.05);
+    ctx.stroke();
+
+    ctx.fillStyle = melee.element ? CONFIG.colors[melee.element] : '#FFAA00';
+    ctx.beginPath();
+    ctx.arc(melee.range * 0.7, -22, 6, 0, Math.PI * 2);
+    ctx.arc(melee.range * 0.5, -42, 4, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (melee.type === 'elbow') {
+    // Point-blank concentrated impact diamond & shockwave
+    ctx.lineWidth = 3;
+    const ex = melee.range - 6;
+    ctx.beginPath();
+    ctx.moveTo(ex, -14);
+    ctx.lineTo(ex + 14, 0);
+    ctx.lineTo(ex, 14);
+    ctx.lineTo(ex - 14, 0);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.fillStyle = melee.element ? CONFIG.colors[melee.element] : '#FF5555';
+    ctx.beginPath();
+    ctx.arc(ex, 0, 5, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   ctx.restore();

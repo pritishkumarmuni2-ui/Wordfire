@@ -378,6 +378,66 @@ export const POWERS = {
     effect: 'dash_dodge',
     description: 'Prepare dash; press Left or Right within 2s for 220px dash & i-frames',
   },
+
+  // ---------------- UNIVERSAL CLOSE COMBAT ATTACKS ----------------
+  punch: {
+    id: 'punch',
+    element: 'universal',
+    name: 'Punch',
+    command: 'punch',
+    type: 'melee',
+    damage: 4,
+    cooldown: 0,
+    range: 55,
+    duration: 0.16,
+    color: '#FFFFFF',
+    effect: 'punch',
+    description: 'Swift martial straight punch (4 dmg)',
+  },
+  kick: {
+    id: 'kick',
+    element: 'universal',
+    name: 'Kick',
+    command: 'kick',
+    type: 'melee',
+    damage: 6,
+    cooldown: 0,
+    range: 78,
+    duration: 0.22,
+    color: '#E0E6ED',
+    effect: 'kick',
+    knockback: 180,
+    description: 'Roundhouse leg sweep (6 dmg, knocks back opponent)',
+  },
+  uppercut: {
+    id: 'uppercut',
+    element: 'universal',
+    name: 'Uppercut',
+    command: 'uppercut',
+    type: 'melee',
+    damage: 7,
+    cooldown: 0,
+    range: 65,
+    duration: 0.26,
+    color: '#FFAA00',
+    effect: 'uppercut',
+    verticalPop: -230,
+    description: 'Rising upward strike (7 dmg, launches opponent into the air)',
+  },
+  elbow: {
+    id: 'elbow',
+    element: 'universal',
+    name: 'Elbow',
+    command: 'elbow',
+    type: 'melee',
+    damage: 8,
+    cooldown: 0,
+    range: 44,
+    duration: 0.18,
+    color: '#FF5555',
+    effect: 'elbow',
+    description: 'Crushing infighting elbow strike (8 dmg at ultra close range)',
+  },
 };
 
 // Map of commands allowed per element
@@ -388,4 +448,10 @@ export const ELEMENT_COMMANDS = {
   light: ['light beam', 'speed', 'radiation', 'shoot', 'power', 'solar beam'],
 };
 
-export const UNIVERSAL_COMMANDS = ['shield', 'dodge', 'help', 'collect', 'swap', 'slash', 'stab', 'arrow', 'play again', 'playagain', 'restart'];
+export const UNIVERSAL_COMMANDS = [
+  'shield', 'dodge', 'help', 'collect', 'swap',
+  'slash', 'stab', 'arrow',
+  'punch', 'jab', 'kick', 'sweep', 'uppercut', 'elbow',
+  'play again', 'playagain', 'restart',
+  'pause', 'menu', 'resume', 'quit', 'exit'
+];

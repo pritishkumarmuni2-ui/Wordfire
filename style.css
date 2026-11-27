@@ -388,6 +388,135 @@ body {
 }
 
 /* ==========================================================================
+   Pause Button & Pause Modal
+   ========================================================================== */
+.top-pause-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 15;
+  background: rgba(18, 22, 30, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: #E2E8F0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.top-pause-btn:hover {
+  background: rgba(30, 36, 48, 0.95);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.top-pause-btn .pause-icon {
+  font-size: 12px;
+}
+
+.pause-modal {
+  padding: 28px 32px;
+  max-width: 480px;
+}
+
+.badge-pause {
+  color: #FBBF24;
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.pause-title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.pause-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.pause-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pause-action-btn {
+  width: 100%;
+  padding: 11px 20px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+
+.secondary-btn {
+  background: #1E232E;
+  color: #E2E8F0;
+  border: 1px solid var(--border-subtle);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.secondary-btn:hover {
+  background: #282F3E;
+  border-color: #4A5568;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.danger-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.danger-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.pause-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.pause-hint kbd {
+  background: #222630;
+  color: #E2E8F0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #363C4C;
+  font-family: inherit;
+}
+
+/* ==========================================================================
    Bottom Bar (Quick Commands, Input Row & Event Log)
    ========================================================================== */
 #bottom-bar {

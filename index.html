@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wordfire v1</title>
-  <link rel="stylesheet" href="./style.css?v=1.2">
+  <link rel="stylesheet" href="./style.css?v=1.3">
 </head>
 <body>
   <div id="game-container">
@@ -83,6 +83,29 @@
           </div>
         </div>
       </div>
+
+      <!-- Floating Pause Button on Canvas -->
+      <button id="pause-btn" class="top-pause-btn" title="Pause Game (Esc)">
+        <span class="pause-icon">⏸</span> PAUSE
+      </button>
+
+      <!-- Pause Screen Overlay -->
+      <div id="pause-overlay" class="overlay-screen hidden">
+        <div class="modal-card pause-modal">
+          <div class="logo-badge badge-pause">MATCH PAUSED</div>
+          <h2 class="pause-title">DUEL SUSPENDED</h2>
+          <p class="pause-subtitle">Choose an option below or press ESC to resume:</p>
+          <div id="pause-stats" class="result-stats"></div>
+          <div class="pause-actions">
+            <button id="resume-btn" class="primary-btn pause-action-btn">▶ RESUME DUEL</button>
+            <button id="pause-restart-btn" class="secondary-btn pause-action-btn">↺ RESTART MATCH</button>
+            <button id="pause-quit-btn" class="danger-btn pause-action-btn">✕ QUIT TO PICK SCREEN</button>
+          </div>
+          <div class="pause-hint">
+            <span>Press <kbd>ESC</kbd> or type <kbd>resume</kbd> | Type <kbd>restart</kbd> or <kbd>quit</kbd></span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Bottom Controls: Quick Commands, Always-Focused Input & Styled Combat Log -->
@@ -123,6 +146,6 @@
     </div>
   </div>
 
-  <script type="module" src="./src/main.js?v=1.2"></script>
+  <script type="module" src="./src/main.js?v=1.3"></script>
 </body>
 </html>

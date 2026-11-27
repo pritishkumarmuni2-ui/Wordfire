@@ -39,6 +39,23 @@ export function executeCommand(state, fighterId, rawInput) {
     return { success: true, action: 'restart' };
   }
 
+  // Pause / Resume / Quit commands
+  if (cmd === 'pause' || cmd === 'menu') {
+    state.pauseRequested = true;
+    addLogMessage(state, `${fighter.name}: Duel Paused.`, 'system');
+    return { success: true, action: 'pause' };
+  }
+  if (cmd === 'resume') {
+    state.resumeRequested = true;
+    addLogMessage(state, `${fighter.name}: Resuming duel...`, 'system');
+    return { success: true, action: 'resume' };
+  }
+  if (cmd === 'quit' || cmd === 'exit') {
+    state.quitRequested = true;
+    addLogMessage(state, `${fighter.name}: Quitting duel...`, 'system');
+    return { success: true, action: 'quit' };
+  }
+
   // If frozen, cannot type commands
   if (fighter.frozen) {
     if (fighterId === 'player') {
@@ -164,6 +181,12 @@ export function executeCommand(state, fighterId, rawInput) {
 
     // Execute weapon attack
     executeWeaponAttack(state, fighter, opponent, cmd);
+    return { success: true };
+  }
+
+  // Universal close combat martial attacks (punch, kick, uppercut, elbow, etc.)
+  if (cmd === 'punch' || cmd === 'jab' || cmd === 'kick' || cmd === 'sweep' || cmd === 'uppercut' || cmd === 'elbow') {
+    executeCloseCombatAttack(state, fighter, opponent, cmd);
     return { success: true };
   }
 
@@ -317,6 +340,52 @@ function executeWeaponAttack(state, fighter, opponent, cmd) {
     });
     addLogMessage(state, `${fighter.name} looses an arrow!`, fighter.id);
   }
+}
+
+/**
+ * Executes a martial close combat attack (punch, kick, uppercut, elbow).
+ */
+function executeCloseCombatAttack(state, fighter, opponent, cmd) {
+  let moveKey = cmd;
+  if (moveKey === 'jab') moveKey = 'punch';
+  if (moveKey === 'sweep') moveKey = 'kick';
+
+  const powerDef = POWERS[moveKey];
+  if (!powerDef) return;
+
+  fighter.lastAttackTime = state.matchElapsed;
+  fighter.antiCampTimer = 0;
+  fighter.pose = 'melee';
+  fighter.poseTimer = powerDef.duration + 0.08;
+
+  const isImbued = fighter.weaponImbued && fighter.weaponImbueTimer > 0;
+  const imbueBonus = isImbued ? CONFIG.weapons.imbueBonusDamage : 0;
+  const element = isImbued ? fighter.weaponImbueElement : null;
+
+  const baseDamage = powerDef.damage + imbueBonus;
+  const finalDamage = calculateOutgoingDamage(fighter, baseDamage, element || 'melee');
+
+  fighter.activeMelee = {
+    type: moveKey,
+    damage: finalDamage,
+    range: powerDef.range,
+    timer: powerDef.duration,
+    element,
+    isImbued,
+    knockback: powerDef.knockback || 0,
+    verticalPop: powerDef.verticalPop || 0,
+    facing: fighter.facing,
+    x: fighter.x,
+    y: fighter.y - fighter.height / 2,
+  };
+
+  const verbMap = {
+    punch: 'throws a swift punch!',
+    kick: 'delivers a roundhouse kick!',
+    uppercut: 'launches a rising uppercut!',
+    elbow: 'strikes with a crushing elbow!',
+  };
+  addLogMessage(state, `${fighter.name} ${verbMap[moveKey] || 'strikes in close combat!'}`, fighter.id);
 }
 
 /**

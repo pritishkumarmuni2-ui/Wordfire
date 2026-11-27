@@ -549,7 +549,16 @@ function resolveMeleeAndBeams(state, dt) {
         const defenderBox = getFighterHitbox(defender);
 
         if (boxesIntersect(attackBox, defenderBox)) {
-          handleDirectDamage(state, attacker, defender, melee.damage, melee.type, melee.element);
+          handleDirectDamage(
+            state,
+            attacker,
+            defender,
+            melee.damage,
+            melee.type,
+            melee.element,
+            melee.knockback,
+            melee.verticalPop
+          );
         }
       }
 
@@ -587,7 +596,7 @@ function resolveMeleeAndBeams(state, dt) {
   });
 }
 
-function handleDirectDamage(state, attacker, defender, damage, attackName, element) {
+function handleDirectDamage(state, attacker, defender, damage, attackName, element, knockback = 0, verticalPop = 0) {
   if (defender.dodgeIframeTimer > 0) return;
 
   if (state.safePhaseActive) {
@@ -603,6 +612,15 @@ function handleDirectDamage(state, attacker, defender, damage, attackName, eleme
   }
 
   defender.hp = Math.max(0, defender.hp - damage);
+
+  // Apply martial impulses (knockback / vertical pop)
+  if (knockback) {
+    defender.vx += attacker.facing * knockback;
+  }
+  if (verticalPop) {
+    defender.vy = Math.min(defender.vy, verticalPop);
+  }
+
   const color = element ? CONFIG.colors[element] : '#FFDD44';
   spawnDamageSpark(state, defender.x, defender.y - defender.height / 2, color);
   spawnFloatingText(state, defender.x, defender.y - defender.height - 14, `-${damage}`, color);

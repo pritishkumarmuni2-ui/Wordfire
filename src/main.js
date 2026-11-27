@@ -22,6 +22,12 @@ const resultTitle = document.getElementById('result-title');
 const resultSubtitle = document.getElementById('result-subtitle');
 const resultStats = document.getElementById('result-stats');
 const quickCommandsList = document.getElementById('quick-commands-list');
+const pauseBtn = document.getElementById('pause-btn');
+const pauseOverlay = document.getElementById('pause-overlay');
+const resumeBtn = document.getElementById('resume-btn');
+const pauseRestartBtn = document.getElementById('pause-restart-btn');
+const pauseQuitBtn = document.getElementById('pause-quit-btn');
+const pauseStats = document.getElementById('pause-stats');
 
 // Pick screen state selections
 let selectedPlayerElement = 'fire';
@@ -76,7 +82,11 @@ function updateQuickCommands(element) {
   quickCommandsList.innerHTML = '';
 
   const elemSpells = ELEMENT_COMMANDS[element] || [];
-  const universalSpells = ['shield', 'dodge', 'collect', 'swap', 'play again', 'help'];
+  const universalSpells = [
+    'punch', 'kick', 'uppercut', 'elbow',
+    'shield', 'dodge', 'collect', 'swap',
+    'pause', 'play again', 'help'
+  ];
 
   // Elemental Spells
   elemSpells.forEach((cmd) => {
@@ -92,10 +102,11 @@ function updateQuickCommands(element) {
     quickCommandsList.appendChild(btn);
   });
 
-  // Utility & Defensive
+  // Utility, Close Combat & Defensive
   universalSpells.forEach((cmd) => {
     const btn = document.createElement('button');
-    btn.className = 'cmd-pill pill-util';
+    const isCombat = ['punch', 'kick', 'uppercut', 'elbow'].includes(cmd);
+    btn.className = `cmd-pill ${isCombat ? 'pill-elem' : 'pill-util'}`;
     btn.textContent = cmd;
     btn.title = `Execute ${cmd}`;
     btn.addEventListener('click', (e) => {
@@ -106,17 +117,110 @@ function updateQuickCommands(element) {
   });
 }
 
+function pauseGame() {
+  if (!gameState || gameState.ended || gameState.paused) return;
+  gameState.paused = true;
+
+  if (pauseStats) {
+    const elapsedM = Math.floor(gameState.matchElapsed / 60);
+    const elapsedS = Math.floor(gameState.matchElapsed % 60);
+    const timeStr = `${String(elapsedM).padStart(2, '0')}:${String(elapsedS).padStart(2, '0')}`;
+    pauseStats.innerHTML = `
+      <div class="stat-chip">Your HP: <span>${gameState.player.hp}/100</span></div>
+      <div class="stat-chip">Bot HP: <span>${gameState.bot.hp}/100</span></div>
+      <div class="stat-chip">Time: <span>${timeStr}</span></div>
+      <div class="stat-chip">Mode: <span>${gameState.botDifficulty.toUpperCase()}</span></div>
+    `;
+  }
+
+  if (pauseOverlay) {
+    pauseOverlay.classList.remove('hidden');
+    pauseOverlay.style.display = 'flex';
+  }
+
+  if (commandInput) commandInput.focus();
+  if (inputHandler) inputHandler.ensureFocus();
+  updateDOMEventLog(gameState);
+}
+
+function resumeGame() {
+  if (!gameState || !gameState.paused) return;
+  gameState.paused = false;
+
+  if (pauseOverlay) {
+    pauseOverlay.classList.add('hidden');
+    pauseOverlay.style.display = 'none';
+  }
+
+  lastTime = performance.now();
+  if (commandInput) commandInput.focus();
+  if (inputHandler) inputHandler.ensureFocus();
+  updateDOMEventLog(gameState);
+}
+
+function quitGame() {
+  if (gameState) {
+    gameState.paused = false;
+    gameState.ended = true;
+  }
+
+  if (pauseOverlay) {
+    pauseOverlay.classList.add('hidden');
+    pauseOverlay.style.display = 'none';
+  }
+  if (resultOverlay) {
+    resultOverlay.classList.add('hidden');
+    resultOverlay.style.display = 'none';
+  }
+  if (canvas) {
+    canvas.style.display = 'none';
+  }
+  if (pickScreen) {
+    pickScreen.classList.remove('hidden');
+    pickScreen.style.display = 'flex';
+  }
+
+  if (commandInput) commandInput.value = '';
+}
+
 function handlePlayerCommand(typedCommand) {
   const norm = (typedCommand || '').trim().toLowerCase().replace(/\s+/g, ' ');
   if (norm === 'play again' || norm === 'playagain' || norm === 'restart') {
     startNewMatch();
     return;
   }
+  if (norm === 'pause' || norm === 'menu') {
+    pauseGame();
+    return;
+  }
+  if (norm === 'resume') {
+    resumeGame();
+    return;
+  }
+  if (norm === 'quit' || norm === 'exit') {
+    quitGame();
+    return;
+  }
   if (gameState && !gameState.ended) {
+    if (gameState.paused) return;
     const res = executeCommand(gameState, 'player', typedCommand);
-    if (res && res.action === 'restart') {
-      startNewMatch();
-      return;
+    if (res) {
+      if (res.action === 'restart') {
+        startNewMatch();
+        return;
+      }
+      if (res.action === 'pause') {
+        pauseGame();
+        return;
+      }
+      if (res.action === 'resume') {
+        resumeGame();
+        return;
+      }
+      if (res.action === 'quit') {
+        quitGame();
+        return;
+      }
     }
     updateDOMEventLog(gameState);
   }
@@ -128,14 +232,41 @@ function onQuickCommandClick(cmd) {
     startNewMatch();
     return;
   }
+  if (norm === 'pause' || norm === 'menu') {
+    pauseGame();
+    return;
+  }
+  if (norm === 'resume') {
+    resumeGame();
+    return;
+  }
+  if (norm === 'quit' || norm === 'exit') {
+    quitGame();
+    return;
+  }
   if (commandInput) {
     commandInput.value = cmd;
   }
   if (gameState && !gameState.ended) {
+    if (gameState.paused) return;
     const res = executeCommand(gameState, 'player', cmd);
-    if (res && res.action === 'restart') {
-      startNewMatch();
-      return;
+    if (res) {
+      if (res.action === 'restart') {
+        startNewMatch();
+        return;
+      }
+      if (res.action === 'pause') {
+        pauseGame();
+        return;
+      }
+      if (res.action === 'resume') {
+        resumeGame();
+        return;
+      }
+      if (res.action === 'quit') {
+        quitGame();
+        return;
+      }
     }
     if (commandInput) commandInput.value = '';
     updateDOMEventLog(gameState);
@@ -189,6 +320,46 @@ function initPickScreen() {
     });
   }
 
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      pauseGame();
+    });
+  }
+
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      resumeGame();
+    });
+  }
+
+  if (pauseRestartBtn) {
+    pauseRestartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      startNewMatch();
+    });
+  }
+
+  if (pauseQuitBtn) {
+    pauseQuitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      quitGame();
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.code === 'Escape') {
+      if (gameState && !gameState.ended) {
+        if (gameState.paused) {
+          resumeGame();
+        } else {
+          pauseGame();
+        }
+      }
+    }
+  });
+
   // Populate initial quick commands
   updateQuickCommands(selectedPlayerElement);
 }
@@ -233,6 +404,11 @@ function startNewMatch() {
     if (resultOverlay) {
       resultOverlay.classList.add('hidden');
       resultOverlay.style.display = 'none';
+    }
+
+    if (pauseOverlay) {
+      pauseOverlay.classList.add('hidden');
+      pauseOverlay.style.display = 'none';
     }
 
     // Update quick commands list
@@ -302,6 +478,12 @@ function mainLoop(now) {
   lastTime = now;
 
   if (gameState) {
+    if (gameState.paused) {
+      const mouseState = inputHandler ? inputHandler.getMouseCoords() : {};
+      renderGame(ctx, gameState, mouseState);
+      return;
+    }
+
     try {
       accumulator += dt;
 

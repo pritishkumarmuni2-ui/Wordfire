@@ -189,6 +189,13 @@ function decideNextCommand(state, brain, bot, player) {
     }
   }
 
+  // F2. Close combat martial strikes if very close (< 75px)
+  const distToPlayer = Math.abs(dx);
+  if (distToPlayer <= 75 && isFacingPlayer && Math.random() < 0.45) {
+    const martialMoves = ['punch', 'kick', 'uppercut', 'elbow'];
+    return martialMoves[Math.floor(Math.random() * martialMoves.length)];
+  }
+
   // G. Element powers
   const powerCmd = pickElementalPower(state, bot, player, mustAttack);
   if (powerCmd) return powerCmd;

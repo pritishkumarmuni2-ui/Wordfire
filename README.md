@@ -32,15 +32,25 @@ If your browser allows local module loading, simply double-click `index.html` to
 - **Jump**: `Arrow Up`
 - **Swing**: Click and hold the **Mouse** on any valid anchor (within 350 px) to initiate pendulum swing. Release mouse button to let go with momentum. While swinging, `Arrow Left` and `Arrow Right` add push.
 - **Type Commands**: The text prompt at the bottom is always focused. Type your command and press `Enter`.
+- **Pause / Menu**: Press `Escape` or click the floating `⏸ PAUSE` button on the canvas or type `pause`. From the pause menu you can Resume, Restart, or Quit back to character selection.
 - *Note*: Letter keys never move your fighter. The `Space` key is never used for jumping or movement.
 
 ---
 
 ## Commands Reference
 
+### Universal Close Combat Martial Attacks
+Available to all characters at any time (unarmed or armed; receives elemental bonus if weapon/hands are imbued):
+- `punch` (or `jab`) — Rapid martial straight punch (4 damage, 55 px range, fast 0.16s).
+- `kick` (or `sweep`) — Roundhouse leg strike (6 damage, 78 px range, 180 px/s knockback impulse).
+- `uppercut` — Rising martial strike (7 damage, 65 px range, launches opponent into the air).
+- `elbow` — Crushing point-blank strike (8 damage, 44 px range, high risk close-quarters combat).
+
 ### Universal & Utility
+- `pause` / `resume` — Freezes or resumes the duel. Also toggleable with `Escape` or the canvas pause button.
+- `quit` / `exit` — Abandons the duel and returns to the character/difficulty pick screen.
 - `play again` / `restart` — Instantly resets and starts a fresh duel without needing to click with the mouse. Can also be clicked from the quick-command bar.
-- `help` — Prints your element's available commands in the combat log.
+- `help` — Prints available commands in the combat log.
 - `shield` — Deploys a protective dome for 5 seconds (5s cooldown). Blocks all normal powers and weapon strikes. (Ultimates deal 2 chip damage through it).
 - `dodge` — Prepares an evasive dash (2s cooldown). After typing, press `Arrow Left` or `Arrow Right` within 2 seconds to dash 220 px (or 330 px with Light Speed buff) with 0.3s invulnerability.
 - `collect` — Picks up a nearby weapon on the ground within 80 px. You can carry up to 2 weapons.
